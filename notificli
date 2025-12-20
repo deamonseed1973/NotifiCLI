@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Configuration
+BASE_DIR="$(dirname "$0")"
+APP_NORMAL="$BASE_DIR/build/NotifiCLI.app/Contents/MacOS/NotifiCLI"
+APP_PERSISTENT="$BASE_DIR/build/NotifiPersistent.app/Contents/MacOS/NotifiPersistent"
+
+# Default to Normal Mode
+TARGET_APP="$APP_NORMAL"
+ARGS=()
+
+# Parse arguments to check for -persistent
+for arg in "$@"; do
+    if [ "$arg" == "-persistent" ]; then
+        TARGET_APP="$APP_PERSISTENT"
+    else
+        ARGS+=("$arg")
+    fi
+done
+
+# Run the selected app with remaining arguments
+"$TARGET_APP" "${ARGS[@]}"
