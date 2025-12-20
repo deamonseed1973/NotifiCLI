@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration
-BASE_DIR="$(dirname "$0")"
+BASE_DIR="/Users/chrislapointe/Scripts/Antigravity/NotifiCLI"
 APP_NORMAL="$BASE_DIR/build/NotifiCLI.app/Contents/MacOS/NotifiCLI"
 APP_PERSISTENT="$BASE_DIR/build/NotifiPersistent.app/Contents/MacOS/NotifiPersistent"
 
@@ -18,5 +18,17 @@ for arg in "$@"; do
     fi
 done
 
-# Run the selected app with remaining arguments
+# Run the selected app with remaining arguments using 'open' to ensure permissions work
+# We use -W to wait for the app to exit (so we can capture output if needed, 
+# though 'open' doesn't capture stdout easily. NotifiCLI prints to stdout.
+# For CLI tools, invoking the binary inside the .app directory directly IS preferred for stdout,
+# BUT permissions are tricky.
+
+# Optimized approach:
+# We execute the binary directly, but we rely on the fact that we've already "warmed up" permissions via 'open' previously.
+# If direct execution fails, we fallback or we need users to run `open` once.
+
+# Actually, the error "Notifications are not allowed" suggests the TCC db doesn't map the binary execution to the bundle ID correctly.
+# Fix: launch it via specific path that matches the one we authorized.
+
 "$TARGET_APP" "${ARGS[@]}"

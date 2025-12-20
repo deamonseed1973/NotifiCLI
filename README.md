@@ -56,3 +56,12 @@ fi
     ```bash
     ln -s $(pwd)/build/NotifiCLI.app/Contents/MacOS/NotifiCLI /usr/local/bin/notificli
     ```
+
+## Troubleshooting
+**"Error requesting auth: Notifications are not allowed"**
+If you see this error, macOS hasn't linked the binary to the bundle's permissions yet. Run the app once via `open` or Finder to fix it:
+```bash
+open build/NotifiCLI.app
+open build/NotifiPersistent.app
+```
+Then try the command again.
