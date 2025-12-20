@@ -22,6 +22,13 @@ for APP_NAME in "${APPS[@]}"; do
         cp Info.plist "${CONTENTS_DIR}/Info.plist"
     fi
 
+    # Copy app icon
+    RESOURCES_DIR="${CONTENTS_DIR}/Resources"
+    mkdir -p "$RESOURCES_DIR"
+    if [ -f "AppIcon.icns" ]; then
+        cp AppIcon.icns "${RESOURCES_DIR}/AppIcon.icns"
+    fi
+
     # Compile Swift (target macOS 11.0+)
     swiftc main.swift -o "${MACOS_DIR}/${APP_NAME}" -target arm64-apple-macosx11.0
 

@@ -22,6 +22,7 @@ Unlike `terminal-notifier`, NotifiCLI:
 | `-actions` | (Optional) Comma-separated list of button labels (e.g., "Yes,No"). |
 | `-persistent` | Uses the "Alert" style so the notification stays on screen. |
 
+
 ## Persistent Mode 📌
 To use persistent alerts (notifications that don't disappear), use the `-persistent` flag.
 
