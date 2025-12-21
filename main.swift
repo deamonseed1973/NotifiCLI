@@ -184,12 +184,18 @@ if let imagePath = imagePath {
 // Schedule notification
 let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
 
+let notificationSemaphore = DispatchSemaphore(value: 0)
+
 center.add(request) { error in
     if let error = error {
         print("Error scheduling notification: \(error.localizedDescription)")
         exit(1)
     }
+    notificationSemaphore.signal()
 }
+
+// Wait for notification to be scheduled
+_ = notificationSemaphore.wait(timeout: .now() + 2.0)
 
 // Wait for user response if actions exist or reply is requested
 if !actions.isEmpty || replyPlaceholder != nil || openUrl != nil {
