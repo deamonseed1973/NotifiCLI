@@ -20,6 +20,8 @@ Unlike `terminal-notifier`, NotifiCLI:
 | `-title` | The bold title of the notification. |
 | `-message` | The body text/subtitle. |
 | `-actions` | (Optional) Comma-separated list of button labels (e.g., "Yes,No"). |
+| `-image` | (Optional) Path to an image file to show as thumbnail on the right. |
+| `-icon` | (Optional) Path to an `.app` to use its icon for the notification. |
 | `-persistent` | Uses the "Alert" style so the notification stays on screen. |
 
 
