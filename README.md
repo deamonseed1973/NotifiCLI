@@ -30,7 +30,7 @@ To use persistent alerts (notifications that don't disappear), use the `-persist
 1. Run a persistent test once: `notificli -message "Setup" -persistent`
 2. Open **System Settings > Notifications**.
 3. Find **NotifiPersistent** in the list.
-4. Change the alert style from "Banner" to **Alerts**.
+4. Change the **Alert Style** to **Persistent**.
 
 Now, valid commands with `-persistent` will stay on screen until clicked.
 
