@@ -3,11 +3,10 @@
 A lightweight, headless macOS command-line tool for sending actionable, persistent notifications.
 
 Unlike `terminal-notifier`, NotifiCLI:
-- 📌 **Persistent Alerts**: Notifications that stay on screen until dismissed
-- 💬 **Reply Input**: Capture typed responses directly from notifications
-- 🎨 **Custom Icons**: Use any app's icon for your notifications
-- 🔇 **Silent by Default**: No sounds unless you want them
-- 🐚 **Fully Scriptable**: Outputs clicked action/reply to `stdout` for shell scripting
+- 💬 **Reply Input**: Capture typed responses (`-reply`) — removed from terminal-notifier in v1.7
+- 📌 **Per-Notification Persistence**: Use `-persistent` flag — terminal-notifier requires system-wide setting
+- 🐚 **Stdout Scripting**: Prints clicked action, reply text, or `dismissed` — terminal-notifier has no stdout output
+- 🎨 **Custom Icons**: Use any app's icon with `-icon` and auto-cached shorthand
 
 ## Usage
 
