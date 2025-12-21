@@ -26,7 +26,7 @@ Unlike `terminal-notifier`, NotifiCLI offers:
 | `-reply` | (Optional) Adds a "Reply" button with a placeholder text input. |
 | `-url` | (Optional) Opens the specified URL when notification is clicked. |
 | `-sound` | (Optional) Play a sound. System sound name (e.g. "Glass") or path to sound file. Silent by default. |
-| `-persistent` | Uses the "Alert" style so the notification stays on screen. |
+| `-persistent` | Notification stays on screen until dismissed. |
 
 ### Output Behavior
 When using `-actions`, `-reply`, or `-url`, the command waits for user interaction and prints the result:
