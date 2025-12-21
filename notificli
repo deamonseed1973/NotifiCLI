@@ -9,6 +9,7 @@ ICONS_DIR="$BASE_DIR/icons"
 APP_VARIANT=""
 ICON_APP=""
 PERSISTENT=false
+HAS_ACTIONS=false
 ARGS=()
 
 # Parse arguments
@@ -24,6 +25,11 @@ while [[ $# -gt 0 ]]; do
             ;;
         -icon)
             ICON_APP="$2"
+            shift 2
+            ;;
+        -actions)
+            HAS_ACTIONS=true
+            ARGS+=("$1" "$2")
             shift 2
             ;;
         *)
@@ -103,4 +109,10 @@ else
 fi
 
 # Run the selected app
-"$TARGET_APP" "${ARGS[@]}"
+# If no actions, run in background (fire-and-forget)
+# If actions present, wait for user response
+if [ "$HAS_ACTIONS" = true ]; then
+    "$TARGET_APP" "${ARGS[@]}"
+else
+    "$TARGET_APP" "${ARGS[@]}" &
+fi
