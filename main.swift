@@ -122,7 +122,7 @@ if !notificationActions.isEmpty {
     let category = UNNotificationCategory(identifier: "ACTIONS_CATEGORY",
                                            actions: notificationActions,
                                            intentIdentifiers: [],
-                                           options: [])
+                                           options: [.customDismissAction])
     let categorySemaphore = DispatchSemaphore(value: 0)
     center.setNotificationCategories([category])
     // Give the system time to register the category
