@@ -1,12 +1,13 @@
 # NotifiCLI
 
-A lightweight, "headless" macOS command-line tool for sending actionable, persistent notifications.
+A lightweight, headless macOS command-line tool for sending actionable, persistent notifications.
 
-Unlike `terminal-notifier`, NotifiCLI:
-- 👻 **Invisible**: Has **no Dock icon** and no Menu Bar icon.
-- ⚡️ **Interactive**: Supports customizable action buttons.
-- 🐚 **Scriptable**: Prints the clicked action to `stdout` and waits for input.
-- 🍎 **Native**: Uses the modern `UserNotifications` framework.
+**Why NotifiCLI over `terminal-notifier`?**
+- 📌 **Persistent Alerts**: Notifications that stay on screen until dismissed
+- � **Reply Input**: Capture typed responses directly from notifications
+- 🎨 **Custom Icons**: Use any app's icon for your notifications
+- 🔇 **Silent by Default**: No sounds unless you want them
+- 🐚 **Fully Scriptable**: Outputs clicked action/reply to `stdout` for shell scripting
 
 ## Usage
 
