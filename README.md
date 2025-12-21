@@ -72,28 +72,24 @@ fi
 
 ## Custom Icons 🎨
 
-You can create app variants with custom notification icons:
+Use any app's icon for your notifications with the `-icon` flag:
 
-1. **Copy an icon** from any app:
-   - Right-click any `.app` → **Get Info** (or ⌘I)
-   - Click the icon in the top-left → **⌘C** to copy
+```bash
+notificli -icon "/Applications/Slack.app" -title "Message" -message "New DM received"
+```
 
-2. **Save as PNG**:
-   - Open **Preview** → File → **New from Clipboard**
-   - File → **Export** → Format: **PNG**
-   - Save to: `icons/HomeAssistant.png` (or any name)
+The first time you use a new icon, it auto-creates a variant (takes ~1 second). Subsequent uses are instant.
 
-3. **Rebuild**:
-   ```bash
-   ./build.sh
-   ```
+**Examples:**
+```bash
+# Use Terminal's icon
+notificli -icon "/System/Applications/Utilities/Terminal.app" -title "Build" -message "Complete"
 
-4. **Use**:
-   ```bash
-   notificli -app HomeAssistant -title "Motion" -message "Front door"
-   ```
+# Use any installed app
+notificli -icon "/Applications/Keyboard Maestro.app" -title "Macro" -message "Finished"
+```
 
-> **Note**: macOS caches app icons aggressively. After adding new icon variants, a **reboot is required** for the icons to appear correctly in Notification Center.
+> **Note**: macOS caches app icons. After using a new icon for the first time, a **reboot is required** for the icon to appear correctly in Notification Center.
 
 ## Troubleshooting
 **"Error requesting auth: Notifications are not allowed"**

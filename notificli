@@ -3,9 +3,11 @@
 # Configuration
 BASE_DIR="/Users/chrislapointe/Scripts/Antigravity/NotifiCLI"
 BUILD_DIR="$BASE_DIR/build"
+ICONS_DIR="$BASE_DIR/icons"
 
 # Defaults
 APP_VARIANT=""
+ICON_APP=""
 PERSISTENT=false
 ARGS=()
 
@@ -20,12 +22,66 @@ while [[ $# -gt 0 ]]; do
             APP_VARIANT="$2"
             shift 2
             ;;
+        -icon)
+            ICON_APP="$2"
+            shift 2
+            ;;
         *)
             ARGS+=("$1")
             shift
             ;;
     esac
 done
+
+# If -icon is specified, auto-create variant if needed
+if [ -n "$ICON_APP" ]; then
+    # Generate variant name from app name (e.g., "Keyboard Maestro.app" -> "KeyboardMaestro")
+    APP_BASENAME=$(basename "$ICON_APP" .app)
+    APP_VARIANT=$(echo "$APP_BASENAME" | tr -d ' ')
+    
+    VARIANT_APP="$BUILD_DIR/NotifiCLI-${APP_VARIANT}.app"
+    
+    # Auto-create if doesn't exist
+    if [ ! -d "$VARIANT_APP" ]; then
+        echo "Creating icon variant for $APP_BASENAME..." >&2
+        
+        # Extract icon
+        PLIST="$ICON_APP/Contents/Info.plist"
+        if [ ! -f "$PLIST" ]; then
+            echo "Error: Invalid app path: $ICON_APP" >&2
+            exit 1
+        fi
+        
+        ICON_NAME=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIconFile" "$PLIST" 2>/dev/null || echo "")
+        [[ "$ICON_NAME" != *.icns ]] && ICON_NAME="${ICON_NAME}.icns"
+        [ -z "$ICON_NAME" ] && ICON_NAME="AppIcon.icns"
+        
+        ICON_PATH="$ICON_APP/Contents/Resources/$ICON_NAME"
+        if [ ! -f "$ICON_PATH" ]; then
+            echo "Error: Icon not found in app" >&2
+            exit 1
+        fi
+        
+        # Copy icon and build variant inline (faster than calling build.sh)
+        mkdir -p "$ICONS_DIR"
+        cp "$ICON_PATH" "$ICONS_DIR/${APP_VARIANT}.icns"
+        
+        # Build just this variant
+        CONTENTS_DIR="$VARIANT_APP/Contents"
+        mkdir -p "$CONTENTS_DIR/MacOS" "$CONTENTS_DIR/Resources"
+        
+        sed "s/com.DiggingForDinos.NotifiCLI.v2/com.DiggingForDinos.NotifiCLI.${APP_VARIANT}/" "$BASE_DIR/Info.plist" > "$CONTENTS_DIR/Info.plist"
+        cp "$ICON_PATH" "$CONTENTS_DIR/Resources/AppIcon.icns"
+        cp "$BUILD_DIR/NotifiCLI.app/Contents/MacOS/NotifiCLI" "$CONTENTS_DIR/MacOS/NotifiCLI-${APP_VARIANT}"
+        codesign --force --deep -s - "$VARIANT_APP" 2>/dev/null
+        
+        # Warm up permissions by opening the app once
+        open "$VARIANT_APP" 2>/dev/null &
+        sleep 0.5
+        
+        echo "Created NotifiCLI-${APP_VARIANT}" >&2
+    fi
+fi
 
 # Determine which app to use
 if [ "$PERSISTENT" = true ]; then
