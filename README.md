@@ -2,11 +2,11 @@
 
 A lightweight, headless macOS command-line tool for sending actionable, persistent notifications.
 
-Unlike `terminal-notifier`, NotifiCLI:
-- 💬 **Reply Input**: Capture typed responses (`-reply`) — removed from terminal-notifier in v1.7
-- 📌 **Per-Notification Persistence**: Use `-persistent` flag — terminal-notifier requires system-wide setting
-- 🐚 **Stdout Scripting**: Prints clicked action, reply text, or `dismissed` — terminal-notifier has no stdout output
-- 🎨 **Custom Icons**: Use any app's icon with `-icon` and auto-cached shorthand
+Unlike `terminal-notifier`, NotifiCLI offers:
+- **Reply input** — capture typed responses with `-reply` (removed from terminal-notifier in v1.7)
+- **Per-notification persistence** — use the `-persistent` flag instead of a system-wide setting
+- **Stdout scripting** — outputs clicked actions, reply text, or dismissals (terminal-notifier outputs nothing)
+- **Custom icons** — use any app's icon via `-icon`, with automatic caching shorthand
 
 ## Usage
 
@@ -101,16 +101,15 @@ esac
 Capture user input directly from the notification:
 
 ```bash
-OUTPUT=$(notificli -title "Status" -message "Update status?" -reply "Type 'Done' or 'Working'")
+OUTPUT=$(notificli -title 'Status' -message 'Update status?' -reply 'Type here')
 echo "You typed: $OUTPUT"
-# Output: "You typed: User typed: Done"
 ```
 
 ### Open URL
 Open a link when the user clicks the notification body:
 
 ```bash
-notificli -title "Build Failed" -message "Click to view logs" -url "https://github.com/my/repo/actions"
+notificli -title 'Build Failed' -message 'Click to view logs' -url 'https://github.com/my/repo/actions'
 ```
 
 ## Installation
@@ -139,7 +138,7 @@ This compiles apps into the `build/` directory.
 Use any app's icon for your notifications with the `-icon` flag:
 
 ```bash
-notificli -icon "/Applications/Slack.app" -title "Message" -message "New DM received"
+notificli -icon '/Applications/Slack.app' -title 'Message' -message 'New DM received'
 ```
 
 The first time you use a new icon, it auto-creates a variant (takes ~1 second). Subsequent uses are instant.
@@ -147,16 +146,16 @@ The first time you use a new icon, it auto-creates a variant (takes ~1 second). 
 **Shorthand:** Once a variant is created, you can use just the name:
 ```bash
 # First time - uses full path
-notificli -icon "/System/Applications/Utilities/Terminal.app" -title "Build" -message "Complete"
+notificli -icon '/System/Applications/Utilities/Terminal.app' -title 'Build' -message 'Complete'
 
 # After that - shorthand works
-notificli -icon "Terminal" -title "Build" -message "Complete"
+notificli -icon 'Terminal' -title 'Build' -message 'Complete'
 ```
 
 **More examples:**
 ```bash
-notificli -icon "/Applications/Keyboard Maestro.app" -title "Macro" -message "Finished"
-notificli -icon "KeyboardMaestro" -title "Macro" -message "Finished"  # shorthand
+notificli -icon '/Applications/Keyboard Maestro.app' -title 'Macro' -message 'Finished'
+notificli -icon 'KeyboardMaestro' -title 'Macro' -message 'Finished'  # shorthand
 ```
 
 > **Note**: macOS caches app icons. After using a new icon for the first time, a **reboot is required** for the icon to appear correctly in Notification Center.
