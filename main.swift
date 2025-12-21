@@ -105,7 +105,7 @@ if let replyPlaceholder = replyPlaceholder {
     let replyAction = UNTextInputNotificationAction(
         identifier: "REPLY_ACTION",
         title: "Reply",
-        options: [],
+        options: [.foreground],  // Foreground required to receive response from Notification Center
         textInputButtonTitle: "Send",
         textInputPlaceholder: replyPlaceholder
     )
