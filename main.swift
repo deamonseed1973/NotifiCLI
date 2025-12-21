@@ -123,7 +123,13 @@ if !notificationActions.isEmpty {
                                            actions: notificationActions,
                                            intentIdentifiers: [],
                                            options: [])
+    let categorySemaphore = DispatchSemaphore(value: 0)
     center.setNotificationCategories([category])
+    // Give the system time to register the category
+    center.getNotificationCategories { _ in
+        categorySemaphore.signal()
+    }
+    _ = categorySemaphore.wait(timeout: .now() + 1.0)
 }
 
 // Create notification content
