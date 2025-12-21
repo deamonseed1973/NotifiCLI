@@ -2,33 +2,49 @@
 
 # Configuration
 BASE_DIR="/Users/chrislapointe/Scripts/Antigravity/NotifiCLI"
-APP_NORMAL="$BASE_DIR/build/NotifiCLI.app/Contents/MacOS/NotifiCLI"
-APP_PERSISTENT="$BASE_DIR/build/NotifiPersistent.app/Contents/MacOS/NotifiPersistent"
+BUILD_DIR="$BASE_DIR/build"
 
-# Default to Normal Mode
-TARGET_APP="$APP_NORMAL"
+# Defaults
+APP_VARIANT=""
+PERSISTENT=false
 ARGS=()
 
-# Parse arguments to check for -persistent
-for arg in "$@"; do
-    if [ "$arg" == "-persistent" ]; then
-        TARGET_APP="$APP_PERSISTENT"
-    else
-        ARGS+=("$arg")
-    fi
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -persistent)
+            PERSISTENT=true
+            shift
+            ;;
+        -app)
+            APP_VARIANT="$2"
+            shift 2
+            ;;
+        *)
+            ARGS+=("$1")
+            shift
+            ;;
+    esac
 done
 
-# Run the selected app with remaining arguments using 'open' to ensure permissions work
-# We use -W to wait for the app to exit (so we can capture output if needed, 
-# though 'open' doesn't capture stdout easily. NotifiCLI prints to stdout.
-# For CLI tools, invoking the binary inside the .app directory directly IS preferred for stdout,
-# BUT permissions are tricky.
+# Determine which app to use
+if [ "$PERSISTENT" = true ]; then
+    TARGET_APP="$BUILD_DIR/NotifiPersistent.app/Contents/MacOS/NotifiPersistent"
+elif [ -n "$APP_VARIANT" ]; then
+    VARIANT_APP="$BUILD_DIR/NotifiCLI-${APP_VARIANT}.app/Contents/MacOS/NotifiCLI-${APP_VARIANT}"
+    if [ -x "$VARIANT_APP" ]; then
+        TARGET_APP="$VARIANT_APP"
+    else
+        echo "Error: Icon variant '$APP_VARIANT' not found." >&2
+        echo "Available variants:" >&2
+        for app in "$BUILD_DIR"/NotifiCLI-*.app; do
+            [ -d "$app" ] && basename "$app" .app | sed 's/NotifiCLI-/  /'
+        done
+        exit 1
+    fi
+else
+    TARGET_APP="$BUILD_DIR/NotifiCLI.app/Contents/MacOS/NotifiCLI"
+fi
 
-# Optimized approach:
-# We execute the binary directly, but we rely on the fact that we've already "warmed up" permissions via 'open' previously.
-# If direct execution fails, we fallback or we need users to run `open` once.
-
-# Actually, the error "Notifications are not allowed" suggests the TCC db doesn't map the binary execution to the bundle ID correctly.
-# Fix: launch it via specific path that matches the one we authorized.
-
+# Run the selected app
 "$TARGET_APP" "${ARGS[@]}"
