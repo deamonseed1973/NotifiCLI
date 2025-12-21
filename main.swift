@@ -143,6 +143,43 @@ content.body = notificationMessage
 // Sound configuration - silent by default, only play if -sound is specified
 content.sound = nil
 
+
+if !notificationActions.isEmpty {
+    content.categoryIdentifier = "ACTIONS_CATEGORY"
+}
+
+// Add image attachment if specified
+if let imagePath = imagePath {
+    let imageURL = URL(fileURLWithPath: imagePath)
+    if FileManager.default.fileExists(atPath: imagePath) {
+        do {
+            let attachment = try UNNotificationAttachment(identifier: "image", url: imageURL, options: nil)
+            content.attachments = [attachment]
+        } catch {
+            print("Warning: Could not attach image: \(error.localizedDescription)")
+        }
+    } else {
+        print("Warning: Image not found at \(imagePath)")
+    }
+}
+
+// Schedule notification
+let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+
+let notificationSemaphore = DispatchSemaphore(value: 0)
+
+center.add(request) { error in
+    if let error = error {
+        print("Error scheduling notification: \(error.localizedDescription)")
+        exit(1)
+    }
+    notificationSemaphore.signal()
+}
+
+// Wait for notification to be scheduled
+_ = notificationSemaphore.wait(timeout: .now() + 2.0)
+
+// Play sound after notification is scheduled
 if let soundName = soundName {
     var soundPlayed = false
     
@@ -179,41 +216,6 @@ if let soundName = soundName {
         Thread.sleep(forTimeInterval: 1.0)
     }
 }
-
-if !notificationActions.isEmpty {
-    content.categoryIdentifier = "ACTIONS_CATEGORY"
-}
-
-// Add image attachment if specified
-if let imagePath = imagePath {
-    let imageURL = URL(fileURLWithPath: imagePath)
-    if FileManager.default.fileExists(atPath: imagePath) {
-        do {
-            let attachment = try UNNotificationAttachment(identifier: "image", url: imageURL, options: nil)
-            content.attachments = [attachment]
-        } catch {
-            print("Warning: Could not attach image: \(error.localizedDescription)")
-        }
-    } else {
-        print("Warning: Image not found at \(imagePath)")
-    }
-}
-
-// Schedule notification
-let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-
-let notificationSemaphore = DispatchSemaphore(value: 0)
-
-center.add(request) { error in
-    if let error = error {
-        print("Error scheduling notification: \(error.localizedDescription)")
-        exit(1)
-    }
-    notificationSemaphore.signal()
-}
-
-// Wait for notification to be scheduled
-_ = notificationSemaphore.wait(timeout: .now() + 2.0)
 
 // Wait for user response if actions exist or reply is requested
 if !actions.isEmpty || replyPlaceholder != nil || openUrl != nil {
