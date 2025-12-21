@@ -74,7 +74,7 @@ class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
         }
         
         completionHandler()
-        semaphore.signal()
+        // No need to signal semaphore anymore, assuming we poll selectedAction
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
@@ -197,8 +197,11 @@ center.add(request) { error in
 }
 
 // Wait for user response if actions exist or reply is requested
-if !actions.isEmpty || replyPlaceholder != nil {
-    _ = delegate.semaphore.wait(timeout: .distantFuture)
+if !actions.isEmpty || replyPlaceholder != nil || openUrl != nil {
+    // Run the run loop until action is received
+    while delegate.selectedAction == nil {
+        RunLoop.current.run(mode: .default, before: Date(timeIntervalSinceNow: 0.1))
+    }
     
     if let action = delegate.selectedAction {
         print(action)
