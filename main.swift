@@ -9,6 +9,8 @@ var message: String?
 var actions: [String] = []
 var imagePath: String?
 var soundName: String?
+var replyPlaceholder: String?
+var openUrl: String?
 var isSilent = false
 
 var args = CommandLine.arguments.dropFirst()
@@ -28,6 +30,10 @@ while let arg = args.popFirst() {
         imagePath = args.popFirst()
     case "-sound":
         soundName = args.popFirst()
+    case "-reply":
+        replyPlaceholder = args.popFirst()
+    case "-url":
+        openUrl = args.popFirst()
     case "-silent":
         isSilent = true
     default:
@@ -36,7 +42,7 @@ while let arg = args.popFirst() {
 }
 
 guard let notificationTitle = title, let notificationMessage = message else {
-    print("Usage: NotifiCLI -title \"Title\" -message \"Message\" [-subtitle \"Subtitle\"] [-actions \"Yes,No\"] [-image \"/path/to/image.png\"] [-sound \"Name\"] [-silent]")
+    print("Usage: NotifiCLI -title \"Title\" -message \"Message\" [-subtitle \"Subtitle\"] [-actions \"Yes,No\"] [-reply \"Placeholder\"] [-url \"https://...\"] [-image \"/path/to/image.png\"] [-sound \"Name\"] [-silent]")
     exit(1)
 }
 
@@ -50,14 +56,23 @@ class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
-        switch response.actionIdentifier {
-        case UNNotificationDefaultActionIdentifier:
+        
+        // Handle Text Input
+        if let textResponse = response as? UNTextInputNotificationResponse {
+            selectedAction = "User typed: \(textResponse.userText)"
+        } 
+        // Handle Default Click (Open URL)
+        else if response.actionIdentifier == UNNotificationDefaultActionIdentifier {
             selectedAction = "default"
-        case UNNotificationDismissActionIdentifier:
+            if let openUrl = openUrl, let url = URL(string: openUrl) {
+                NSWorkspace.shared.open(url)
+            }
+        } else if response.actionIdentifier == UNNotificationDismissActionIdentifier {
             selectedAction = "dismissed"
-        default:
+        } else {
             selectedAction = response.actionIdentifier
         }
+        
         completionHandler()
         semaphore.signal()
     }
@@ -84,10 +99,27 @@ center.requestAuthorization(options: [.alert, .sound]) { granted, error in
 }
 
 // Register action category if needed
+var notificationActions: [UNNotificationAction] = []
+
+if let replyPlaceholder = replyPlaceholder {
+    let replyAction = UNTextInputNotificationAction(
+        identifier: "REPLY_ACTION",
+        title: "Reply",
+        options: [],
+        textInputButtonTitle: "Send",
+        textInputPlaceholder: replyPlaceholder
+    )
+    notificationActions.append(replyAction)
+}
+
 if !actions.isEmpty {
-    let notificationActions = actions.map { actionTitle in
+    let customActions = actions.map { actionTitle in
         UNNotificationAction(identifier: actionTitle, title: actionTitle, options: [.foreground])
     }
+    notificationActions.append(contentsOf: customActions)
+}
+
+if !notificationActions.isEmpty {
     let category = UNNotificationCategory(identifier: "ACTIONS_CATEGORY",
                                            actions: notificationActions,
                                            intentIdentifiers: [],
@@ -135,7 +167,7 @@ if isSilent {
     }
 }
 
-if !actions.isEmpty {
+if !notificationActions.isEmpty {
     content.categoryIdentifier = "ACTIONS_CATEGORY"
 }
 
@@ -164,9 +196,11 @@ center.add(request) { error in
     }
 }
 
-// Wait for user response
-_ = delegate.semaphore.wait(timeout: .distantFuture)
-
-if let action = delegate.selectedAction {
-    print(action)
+// Wait for user response if actions exist or reply is requested
+if !actions.isEmpty || replyPlaceholder != nil {
+    _ = delegate.semaphore.wait(timeout: .distantFuture)
+    
+    if let action = delegate.selectedAction {
+        print(action)
+    }
 }
