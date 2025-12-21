@@ -144,21 +144,39 @@ content.body = notificationMessage
 content.sound = nil
 
 if let soundName = soundName {
-    // Try file in bundle first
-    if let soundPath = Bundle.main.path(forResource: soundName, ofType: nil) {
-        if let sound = NSSound(contentsOfFile: soundPath, byReference: true) {
-            sound.play()
+    var soundPlayed = false
+    
+    // Try file in bundle Resources directory first
+    if let resourcePath = Bundle.main.resourcePath {
+        let soundPath = (resourcePath as NSString).appendingPathComponent(soundName)
+        if FileManager.default.fileExists(atPath: soundPath) {
+            if let sound = NSSound(contentsOfFile: soundPath, byReference: true) {
+                sound.play()
+                soundPlayed = true
+            }
         }
-    } 
-    // Try system sound by name
-    else if let sound = NSSound(named: NSSound.Name(soundName)) {
-        sound.play()
     }
+    
+    // Try system sound by name (without extension)
+    if !soundPlayed {
+        let nameWithoutExt = (soundName as NSString).deletingPathExtension
+        if let sound = NSSound(named: NSSound.Name(nameWithoutExt)) {
+            sound.play()
+            soundPlayed = true
+        }
+    }
+    
     // Try absolute path (if passed directly)
-    else if FileManager.default.fileExists(atPath: soundName) {
+    if !soundPlayed && FileManager.default.fileExists(atPath: soundName) {
         if let sound = NSSound(contentsOfFile: soundName, byReference: true) {
             sound.play()
+            soundPlayed = true
         }
+    }
+    
+    // Wait for sound to play before process exits
+    if soundPlayed {
+        Thread.sleep(forTimeInterval: 1.0)
     }
 }
 

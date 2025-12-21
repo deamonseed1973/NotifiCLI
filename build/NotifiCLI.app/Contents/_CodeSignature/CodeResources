@@ -8,6 +8,10 @@
 		<data>
 		ip+7r/f8HHQFqxhtafVVuycroFk=
 		</data>
+		<key>Resources/Glass.aiff</key>
+		<data>
+		iyPAkxQTNxee3aHBGSjqm2j8sgo=
+		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -22,7 +26,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			r4Yvy+K2W8TYhCvy8vFCOnrksfzNVLHOlyRL6BW+Seg=
+			50y+ArDdfcGo5IKTCEJk2fmqLaE9J6dgnZCar4K9I+U=
 			</data>
 		</dict>
 		<key>Apps/NotifiPersistent.app/Contents/Resources/AppIcon.icns</key>
@@ -44,6 +48,13 @@
 			<key>hash2</key>
 			<data>
 			J9lgdEUwAyxkb8gQj640f5nlmXXj/Ij438X39nOA45Y=
+			</data>
+		</dict>
+		<key>Resources/Glass.aiff</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			szfY4BBmww3i8pZ2Ngm35Ii7PG6oF6qHXumZ1whDPPk=
 			</data>
 		</dict>
 	</dict>
