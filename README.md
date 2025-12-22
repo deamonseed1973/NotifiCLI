@@ -137,6 +137,32 @@ notificli -title 'Build Failed' -message 'Click to view logs' -url 'https://gith
 ```
 
 
+## Keyboard Maestro Plug-in 🎹
+
+NotifiCLI includes a native **Keyboard Maestro Action** for easy integration into your macros.
+
+### Installation
+1. Download `Keyboard-Maestro-Action.zip` from the [latest release](https://github.com/DiggingForDinos/NotifiCLI/releases).
+2. Unzip the file. You should see a folder named `NotifiCLI`.
+3. Move the `NotifiCLI` folder to:
+   `~/Library/Application Support/Keyboard Maestro/Keyboard Maestro Actions/`
+   *(Tip: You can press Command+Shift+G in Finder and paste that path)*
+4. Restart the Keyboard Maestro Engine (File -> Quit Engine, then File -> Launch Engine).
+
+> [!IMPORTANT]
+> **Security Warning (Gatekeeper)**
+> macOS may block the embedded `NotifiCLI` app because it is not notarized. If you see a "malicious software" warning or it fails to run:
+> 1. Go to the installed action folder: `~/Library/Application Support/Keyboard Maestro/Keyboard Maestro Actions/NotifiCLI`
+> 2. Right-click `NotifiCLI.app` inside that folder and choose **Open**.
+> 3. Click **Open** in the dialog to whitelist it.
+> You only need to do this once.
+
+### Usage in Keyboard Maestro
+- Add the **"NotifiCLI"** action to your macro.
+- Fill in the Title, Subtitle, Message.
+- Use the **"Actions"** field to add comma-separated buttons.
+- The action saves the clicked button name to a variable (or clipboard) so you can use it in "If Then Else" actions.
+
 ## Installation
 
 ### Quick Start (Recommended)

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Name</key>
+	<string>NotifiCLI</string>
+	<key>Script</key>
+	<string>Action.sh</string>
+	<key>Icon</key>
+	<string>Icon.png</string>
+	<key>Title</key>
+	<string>%Param%Title%</string>
+	<key>Results</key>
+	<string>Asynchronously|Window|Briefly|Variable|Clipboard|None</string>
+	<key>Parameters</key>
+	<array>
+
+		<dict>
+			<key>Label</key>
+			<string>Title</string>
+			<key>Default</key>
+			<string>%TriggerValue[1]%</string>
+			<key>Type</key>
+			<string>TokenString</string>
+		</dict>
+
+		<dict>
+			<key>Label</key>
+			<string>Subtitle</string>
+			<key>Default</key>
+			<string>%TriggerValue[2]%</string>
+			<key>Type</key>
+			<string>TokenString</string>
+		</dict>
+
+		<dict>
+			<key>Label</key>
+			<string>Message</string>
+			<key>Default</key>
+			<string>%TriggerValue[3]%</string>
+			<key>Type</key>
+			<string>TokenString</string>
+		</dict>
+
+		<dict>
+			<key>Label</key>
+			<string>Persistant</string>
+			<key>Type</key>
+			<string>Checkbox</string>
+			<key>Default</key>
+			<string>0</string>
+		</dict>
+
+		<dict>
+			<key>Label</key>
+			<string>Actions</string>
+			<key>Default</key>
+			<string></string>
+			<key>Type</key>
+			<string>TokenString</string>
+		</dict>
+
+		<dict>
+			<key>Label</key>
+			<string>Reply Placeholder</string>
+			<key>Default</key>
+			<string></string>
+			<key>Type</key>
+			<string>TokenString</string>
+		</dict>
+
+		<dict>
+			<key>Label</key>
+			<string>URL</string>
+			<key>Default</key>
+			<string></string>
+			<key>Type</key>
+			<string>TokenString</string>
+		</dict>
+
+		<dict>
+			<key>Label</key>
+			<string>Sound</string>
+			<key>Default</key>
+			<string></string>
+			<key>Type</key>
+			<string>TokenString</string>
+		</dict>
+
+		<dict>
+			<key>Label</key>
+			<string>Icon Path</string>
+			<key>Default</key>
+			<string></string>
+			<key>Type</key>
+			<string>TokenString</string>
+		</dict>
+
+		<dict>
+			<key>Label</key>
+			<string>Image Path</string>
+			<key>Default</key>
+			<string></string>
+			<key>Type</key>
+			<string>TokenString</string>
+		</dict>
+
+	</array>
+	
+</dict>
+</plist>
