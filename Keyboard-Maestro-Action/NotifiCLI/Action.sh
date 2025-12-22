@@ -1,4 +1,8 @@
 #!/bin/bash
+exec > /tmp/notificli_km.log 2>&1
+echo "--- $(date) ---"
+echo "KMPARAM_Icon_Path: '$KMPARAM_Icon_Path'"
+echo "KMPARAM_Persistant: '$KMPARAM_Persistant'"
 
 # Directory where this script is located
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
@@ -48,6 +52,8 @@ else
         App="${NotifiPath}/Contents/MacOS/NotifiCLI"
     fi
 fi
+
+echo "Resolved App: '$App'"
 
 # Check for other parameters and construct flags
 ActionsFlag=""
