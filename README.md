@@ -27,7 +27,7 @@ Unlike `terminal-notifier`, NotifiCLI offers:
     <td align="center" width="50%">
       <b>Remote Image</b><br>
       <img src="images/image.png?raw=true" width="100%"><br>
-      <code>notificli -title "New Feature Available" -message "Dark Mode has arrived!" -image "https://images.unsplash.com/photo..."</code>
+      <code>notificli -title "pug" -message "Dark Mode has arrived!" -image "https://images.unsplash.com/photo..."</code>
     </td>
     <td align="center" width="50%">
       <b>Open URL</b><br>
