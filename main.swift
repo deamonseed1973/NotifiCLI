@@ -148,12 +148,37 @@ if !notificationActions.isEmpty {
     content.categoryIdentifier = "ACTIONS_CATEGORY"
 }
 
+// Handle remote image
+if let path = imagePath, (path.lowercased().hasPrefix("http://") || path.lowercased().hasPrefix("https://")), let url = URL(string: path) {
+    let tempDir = URL(fileURLWithPath: "/tmp/notificli")
+    do {
+        try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true, attributes: nil)
+        let fileName = url.lastPathComponent.isEmpty ? "image-\(UUID().uuidString)" : url.lastPathComponent
+        let destinationURL = tempDir.appendingPathComponent(fileName)
+        
+        // Simple synchronous download for CLI
+        if let data = try? Data(contentsOf: url) {
+            try data.write(to: destinationURL)
+            print("Downloaded image to \(destinationURL.path)")
+            imagePath = destinationURL.path
+        } else {
+            print("Warning: Failed to download image from \(path)")
+        }
+    } catch {
+        print("Warning: Failed to process remote image: \(error.localizedDescription)")
+    }
+}
+
 // Add image attachment if specified
 if let imagePath = imagePath {
     let imageURL = URL(fileURLWithPath: imagePath)
     if FileManager.default.fileExists(atPath: imagePath) {
         do {
-            let attachment = try UNNotificationAttachment(identifier: "image", url: imageURL, options: nil)
+            // UNNotificationAttachment moves the file, so we make a temporary copy for the attachment
+            let tempAttachmentURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + "." + imageURL.pathExtension)
+            try FileManager.default.copyItem(at: imageURL, to: tempAttachmentURL)
+            
+            let attachment = try UNNotificationAttachment(identifier: "image", url: tempAttachmentURL, options: nil)
             content.attachments = [attachment]
         } catch {
             print("Warning: Could not attach image: \(error.localizedDescription)")

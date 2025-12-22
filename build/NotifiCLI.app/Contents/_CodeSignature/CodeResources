@@ -8,14 +8,6 @@
 		<data>
 		ip+7r/f8HHQFqxhtafVVuycroFk=
 		</data>
-		<key>Resources/Glass.aiff</key>
-		<data>
-		iyPAkxQTNxee3aHBGSjqm2j8sgo=
-		</data>
-		<key>Resources/Submarine.aiff</key>
-		<data>
-		A0sIeUx0FjKA3r3qGdY6iNK57Gg=
-		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -30,7 +22,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			vWWr3DpMgXwy5Xp9MCdyeGJw/8r0B01P7o6ubqY9+Bk=
+			wzjSlUYCVi8viWV2mvTHtJQxpvHema0O0vDFoB31W/0=
 			</data>
 		</dict>
 		<key>Apps/NotifiPersistent.app/Contents/Resources/AppIcon.icns</key>
@@ -52,20 +44,6 @@
 			<key>hash2</key>
 			<data>
 			J9lgdEUwAyxkb8gQj640f5nlmXXj/Ij438X39nOA45Y=
-			</data>
-		</dict>
-		<key>Resources/Glass.aiff</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			szfY4BBmww3i8pZ2Ngm35Ii7PG6oF6qHXumZ1whDPPk=
-			</data>
-		</dict>
-		<key>Resources/Submarine.aiff</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			y7AdjIAy8L5uQeYDYrUaDhTLJnBppJ9MW/qXoopctd0=
 			</data>
 		</dict>
 	</dict>
