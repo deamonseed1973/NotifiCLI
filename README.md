@@ -20,19 +20,19 @@ Unlike `terminal-notifier`, NotifiCLI offers:
     <td align="center" width="50%">
       <b>Reply Input</b><br>
       <img src="images/reply.png?raw=true" width="100%"><br>
-      <code>notificli -title "Weekend Trip" -message "What time do you want to leave on Friday?" -reply "Around 5pm"</code>
+      <code>notificli -title "Weekend Trip" -message "What time do you want to leave on Friday?" -reply "Time you want to leave"</code>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
       <b>Remote Image</b><br>
       <img src="images/image.png?raw=true" width="100%"><br>
-      <code>notificli -title "pug" -message "hello" -image "https://images.unsplash.com/photo..."</code>
+      <code>notificli -title "hi" -subtitle "hello" -message "what's up" -image "https://images.unsplash.com/photo..."</code>
     </td>
     <td align="center" width="50%">
       <b>Open URL</b><br>
       <img src="images/url.png?raw=true" width="100%"><br>
-      <code>notificli -title "Package Delivered" -message "Your order has arrived at the front door." -url "https://github.com/my/repo/actions"</code>
+      <code>notificli -title "Package Delivered" -subtitle "Your order has arrived at the front door." -message "Click to open website" -url "https://fedex.com/track"</code>
     </td>
   </tr>
 </table>
