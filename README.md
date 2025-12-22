@@ -12,35 +12,31 @@ Unlike `terminal-notifier`, NotifiCLI offers:
 
 <table>
   <tr>
-    <td align="center">
+    <td align="center" width="50%">
       <b>Action Buttons</b><br>
-      <img src="images/actions.png?raw=true" width="400">
+      <img src="images/actions.png?raw=true" width="100%"><br>
+      <code>notificli -title "Dinner Decision" -message "What are we ordering tonight?" -actions "Pizza,Sushi,Tacos,Burgers" -sound "Pop"</code>
     </td>
-    <td align="center">
+    <td align="center" width="50%">
       <b>Reply Input</b><br>
-      <img src="images/reply.png?raw=true" width="400">
+      <img src="images/reply.png?raw=true" width="100%"><br>
+      <code>notificli -title "Weekend Trip" -message "What time do you want to leave on Friday?" -reply "Around 5pm"</code>
     </td>
   </tr>
   <tr>
-    <td align="center">
+    <td align="center" width="50%">
       <b>Remote Image</b><br>
-      <img src="images/image.png?raw=true" width="400">
+      <img src="images/image.png?raw=true" width="100%"><br>
+      <code>notificli -title "New Feature Available" -message "Dark Mode has arrived!" -image "https://images.unsplash.com/photo..."</code>
     </td>
-    <td align="center">
+    <td align="center" width="50%">
       <b>Open URL</b><br>
-      <img src="images/url.png?raw=true" width="400">
+      <img src="images/url.png?raw=true" width="100%"><br>
+      <code>notificli -title "Build Failed" -message "Click to view logs" -url "https://github.com/my/repo/actions"</code>
     </td>
   </tr>
 </table>
 
-### 1. Action Buttons
-`notificli -title "Dinner Decision" -message "What are we ordering tonight?" -actions "Pizza,Sushi,Tacos,Burgers" -sound "Pop"`
-
-### 2. Reply Input
-`notificli -title "Weekend Trip" -message "What time do you want to leave on Friday?" -reply "Around 5pm"`
-
-### 3. Remote Image
-`notificli -title "New Feature Available" -message "Dark Mode has arrived! Click to read the changelog." -image "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop" -url "https://github.com/DiggingForDinos/NotifiCLI/releases"`
 
 
 ### Arguments
