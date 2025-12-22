@@ -12,24 +12,24 @@ Unlike `terminal-notifier`, NotifiCLI offers:
 
 <table>
   <tr>
-    <td align="center" width="50%">
+    <td align="center" valign="top" width="50%">
       <b>Action Buttons</b><br>
       <img src="images/actions.png?raw=true" width="100%"><br>
       <code>notificli -title "Deploy to Production?" -message "Version 2.1.0 is ready." -actions "Deploy Now,Schedule Later,Cancel"</code>
     </td>
-    <td align="center" width="50%">
+    <td align="center" valign="top" width="50%">
       <b>Reply Input</b><br>
       <img src="images/reply.png?raw=true" width="100%"><br>
       <code>notificli -title "Weekend Trip" -message "What time do you want to leave on Friday?" -reply "Time you want to leave"</code>
     </td>
   </tr>
   <tr>
-    <td align="center" width="50%">
-      <b>Remote Image</b><br>
+    <td align="center" valign="top" width="50%">
+      <b>Notification Image</b><br>
       <img src="images/image.png?raw=true" width="100%"><br>
       <code>notificli -title "hi" -subtitle "hello" -message "what's up" -image "https://images.unsplash.com/photo..."</code>
     </td>
-    <td align="center" width="50%">
+    <td align="center" valign="top" width="50%">
       <b>Open URL</b><br>
       <img src="images/url.png?raw=true" width="100%"><br>
       <code>notificli -title "Package Delivered" -subtitle "Your order has arrived at the front door." -message "Click to open website" -url "https://fedex.com/track"</code>
