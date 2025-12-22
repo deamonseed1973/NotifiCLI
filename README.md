@@ -10,9 +10,20 @@ Unlike `terminal-notifier`, NotifiCLI offers:
 
 ## Usage
 
-```bash
-/path/to/NotifiCLI -title 'Job Complete' -message 'The render finished successfully.' -actions 'Show,Dismiss'
-```
+### 1. Action Buttons
+`notificli -title "Dinner Decision" -message "What are we ordering tonight?" -actions "Pizza,Sushi,Tacos,Burgers" -sound "Pop"`
+
+![Dinner Actions](img/notification_actions_dinner.png)
+
+### 2. Reply Input
+`notificli -title "Weekend Trip" -message "What time do you want to leave on Friday?" -reply "Around 5pm"`
+
+![Reply Input](img/notification_reply_trip.png)
+
+### 3. Remote Image
+`notificli -title "New Feature Available" -message "Dark Mode has arrived! Click to read the changelog." -image "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop" -url "https://github.com/DiggingForDinos/NotifiCLI/releases"`
+
+![Remote Image](img/notification_remote_image.png)
 
 ### Arguments
 | Flag | Description |
