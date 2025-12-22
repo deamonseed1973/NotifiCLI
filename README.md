@@ -137,6 +137,27 @@ notificli -title 'Build Failed' -message 'Click to view logs' -url 'https://gith
 ```
 
 
+
+## Installation
+
+### Quick Start (Recommended)
+
+1. **Download** the latest release from [Releases](https://github.com/DiggingForDinos/NotifiCLI/releases/tag/Keyboard-Maestro-Action)
+2. **Unzip** and move `NotifiCLI.app` to `~/Applications/` (NotifiPersistent is embedded inside)
+3. **Grant permissions**:
+   - Double-click `NotifiCLI.app` to allow notifications
+   - For persistent alerts, also open `NotifiCLI.app/Contents/Apps/NotifiPersistent.app`
+4. **Add to PATH** (optional):
+   ```bash
+   ln -s ~/Applications/NotifiCLI.app/Contents/MacOS/NotifiCLI /usr/local/bin/notificli
+   ```
+
+### Build from Source
+
+```bash
+./build.sh
+```
+
 ## Keyboard Maestro Plug-in 🎹
 
 <img src="images/km.png?raw=true" width="600">
@@ -165,26 +186,6 @@ NotifiCLI includes a native **Keyboard Maestro Action** for easy integration int
 - Use the **"Actions"** field to add comma-separated buttons.
 - The action saves the clicked button name to a variable (or clipboard) so you can use it in "If Then Else" actions.
 
-## Installation
-
-### Quick Start (Recommended)
-
-1. **Download** the latest release from [Releases](https://github.com/DiggingForDinos/NotifiCLI/releases/tag/Keyboard-Maestro-Action)
-2. **Unzip** and move `NotifiCLI.app` to `~/Applications/` (NotifiPersistent is embedded inside)
-3. **Grant permissions**:
-   - Double-click `NotifiCLI.app` to allow notifications
-   - For persistent alerts, also open `NotifiCLI.app/Contents/Apps/NotifiPersistent.app`
-4. **Add to PATH** (optional):
-   ```bash
-   ln -s ~/Applications/NotifiCLI.app/Contents/MacOS/NotifiCLI /usr/local/bin/notificli
-   ```
-
-### Build from Source
-
-```bash
-./build.sh
-```
-This compiles apps into the `build/` directory.
 
 ## Custom Icons 🎨
 
