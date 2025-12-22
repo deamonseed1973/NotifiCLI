@@ -16,7 +16,17 @@ find_app() {
 }
 
 # Resolve variant name if icon is provided
-VARIANT_NAME="${KMPARAM_Icon_Path// /}"
+VARIANT_NAME=""
+if [ -n "$KMPARAM_Icon_Path" ]; then
+    if [[ "$KMPARAM_Icon_Path" == *.app* ]]; then
+         # Extract basename without extension (e.g. "Home Assistant")
+         BASE_NAME=$(basename "$KMPARAM_Icon_Path" .app)
+         # Sanitize name by removing spaces (e.g. "HomeAssistant")
+         VARIANT_NAME="${BASE_NAME// /}"
+    else
+         VARIANT_NAME="${KMPARAM_Icon_Path// /}"
+    fi
+fi
 
 # Determine which app to use
 NotifiPath=$(find_app "NotifiCLI.app")
