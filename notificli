@@ -1,0 +1,106 @@
+#!/bin/bash
+
+# Base path for built apps
+# Resolve the true path of this script, even if it's a symlink
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+PROJECT_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+
+# Resolve App directory (prefer /Applications for permissions)
+if [ -d "/Applications/NotifiCLI.app" ]; then
+    APP_DIR="/Applications/NotifiCLI.app"
+elif [ -d "${HOME}/Applications/NotifiCLI.app" ]; then
+    APP_DIR="${HOME}/Applications/NotifiCLI.app"
+else
+    APP_DIR="${PROJECT_DIR}/build/NotifiCLI.app"
+fi
+
+BUILD_DIR="${PROJECT_DIR}/build" # Keep for auto-generation check
+
+IS_PERSISTENT=0
+ICON_NAME=""
+PASSTHROUGH_ARGS=()
+
+# Parse arguments to find special flags (-persistent, -icon)
+# and filter them out from the arguments passed to the binary.
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -persistent)
+            IS_PERSISTENT=1
+            shift # past argument
+            ;;
+        -icon)
+            ICON_NAME="$2"
+            shift # past argument
+            shift # past value
+            ;;
+        *)
+            PASSTHROUGH_ARGS+=("$1")
+            shift # past argument
+            ;;
+    esac
+done
+
+# Resolve variant name if icon is provided
+VARIANT_NAME=""
+APP_PATH_ARG=""
+if [ -n "$ICON_NAME" ]; then
+    if [[ "$ICON_NAME" == *.app* ]]; then
+         APP_PATH_ARG="$ICON_NAME"
+         BASE_NAME=$(basename "$APP_PATH_ARG" .app)
+         VARIANT_NAME="${BASE_NAME// /}"
+    else
+         VARIANT_NAME="$ICON_NAME"
+    fi
+fi
+
+# Determine which app to use
+if [ "$IS_PERSISTENT" -eq 1 ]; then
+    BASE_APP_NAME="NotifiPersistent"
+    DEFAULT_PATH="${APP_DIR}/Contents/Apps/NotifiPersistent.app/Contents/MacOS/NotifiPersistent"
+else
+    BASE_APP_NAME="NotifiCLI"
+    DEFAULT_PATH="${APP_DIR}/Contents/MacOS/NotifiCLI"
+fi
+
+APP_PATH="$DEFAULT_PATH"
+
+if [ -n "$VARIANT_NAME" ]; then
+    # Binary name inside the variant bundle
+    VARIANT_BINARY="${BASE_APP_NAME}-${VARIANT_NAME}"
+    # Standard path in the resolved APP_DIR
+    VARIANT_PATH="${APP_DIR}/Contents/Apps/${VARIANT_BINARY}.app/Contents/MacOS/${VARIANT_BINARY}"
+    
+    # Check if we need to auto-generate (only if we have an app path and it's missing in local build)
+    if [ ! -f "$VARIANT_PATH" ] && [ -n "$APP_PATH_ARG" ]; then
+         echo "⚙️  Generating new icon variant for '$VARIANT_NAME'..."
+         "${PROJECT_DIR}/add-icon.sh" "$APP_PATH_ARG" "$VARIANT_NAME" >/dev/null
+         # Update path to point to local build since it was just generated there
+         VARIANT_PATH="${BUILD_DIR}/NotifiCLI.app/Contents/Apps/${VARIANT_BINARY}.app/Contents/MacOS/${VARIANT_BINARY}"
+    fi
+
+    # Final existence check
+    if [ -f "$VARIANT_PATH" ]; then
+        APP_PATH="$VARIANT_PATH"
+    elif [ -f "${BUILD_DIR}/NotifiCLI.app/Contents/Apps/${VARIANT_BINARY}.app/Contents/MacOS/${VARIANT_BINARY}" ]; then
+        # Fallback to local build if not in /Applications
+        APP_PATH="${BUILD_DIR}/NotifiCLI.app/Contents/Apps/${VARIANT_BINARY}.app/Contents/MacOS/${VARIANT_BINARY}"
+    fi
+fi
+
+COMMAND="$APP_PATH"
+
+# Check if app exists
+if [ ! -f "$APP_PATH" ]; then
+    echo "Error: App executable not found at $APP_PATH"
+    echo "Please run build.sh in $PROJECT_DIR to build the project."
+    exit 1
+fi
+
+# Execute the app with filtered arguments
+"$COMMAND" "${PASSTHROUGH_ARGS[@]}"
