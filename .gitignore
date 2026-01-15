@@ -24,4 +24,9 @@ xcuserdata/
 *.swp
 *~
 .vscode/
+
+
+# User requested excludes
+logs/
 deploy.sh
+
