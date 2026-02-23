@@ -15,7 +15,7 @@ Unlike `terminal-notifier`, NotifiCLI offers:
     <td align="center" valign="top" width="50%">
       <b>Action Buttons</b><br>
       <img src="images/actions.png?raw=true" width="100%"><br>
-      <code>notificli -title "Deploy to Production?" -message "Version 2.1.0 is ready." -actions "Deploy Now,Schedule Later,Cancel"</code>
+      <code>notificli -title "Deploy to Production?" -message "Version 1.1.0 is ready." -actions "Deploy Now,Schedule Later,Cancel"</code>
     </td>
     <td align="center" valign="top" width="50%">
       <b>Reply Input</b><br>
@@ -98,7 +98,7 @@ Chain notifications for complex interactive scripts:
 #!/bin/bash
 RESPONSE=$(notificli -persistent \
   -title 'Deploy to Production?' \
-  -message 'Version 2.1.0 is ready.' \
+  -message 'Version 1.1.0 is ready.' \
   -actions 'Deploy Now,Schedule Later,Cancel' \
   -icon 'Terminal' -sound 'Glass')
 
@@ -106,7 +106,7 @@ case "$RESPONSE" in
   'Deploy Now')
     notificli -title 'Deploying!' -message 'Pushing to production...'
     # ... run deploy script ...
-    notificli -title 'Success!' -message 'v2.1.0 is now live!' -sound 'Glass'
+    notificli -title 'Success!' -message 'v1.1.0 is now live!' -sound 'Glass'
     ;;
   'Schedule Later')
     WHEN=$(notificli -persistent -title 'Schedule Deploy' \
