@@ -26,8 +26,8 @@ IS_PERSISTENT=0
 ICON_NAME=""
 PASSTHROUGH_ARGS=()
 
-# Parse arguments to find special flags (-persistent, -icon)
-# and filter them out from the arguments passed to the binary.
+# Parse arguments to find special flags (-persistent, -icon, -app)
+# and handle shorthands for the binary (-t -> -title, -m -> -message)
 while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
@@ -35,10 +35,18 @@ while [[ $# -gt 0 ]]; do
             IS_PERSISTENT=1
             shift # past argument
             ;;
-        -icon)
+        -icon|-app)
             ICON_NAME="$2"
             shift # past argument
             shift # past value
+            ;;
+        -t)
+            PASSTHROUGH_ARGS+=("-title" "$2")
+            shift 2
+            ;;
+        -m)
+            PASSTHROUGH_ARGS+=("-message" "$2")
+            shift 2
             ;;
         *)
             PASSTHROUGH_ARGS+=("$1")
@@ -76,7 +84,8 @@ if [ "$IS_PERSISTENT" -eq 1 ]; then
     DEFAULT_PATH="${APP_DIR}/Contents/Apps/NotifiPersistent.app/Contents/MacOS/NotifiPersistent"
 else
     BASE_APP_NAME="NotifiCLI"
-    DEFAULT_PATH="${APP_DIR}/Contents/MacOS/NotifiCLI"
+    # Use -Binary suffix to avoid conflict with the wrapper script on case-insensitive systems
+    DEFAULT_PATH="${APP_DIR}/Contents/MacOS/NotifiCLI-Binary"
 fi
 
 APP_PATH="$DEFAULT_PATH"

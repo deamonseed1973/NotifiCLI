@@ -4,6 +4,7 @@ set -e
 BUILD_DIR="build"
 ICONS_DIR="icons"
 BACKUP_DIR=".build_backup"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Backup existing binaries if main.swift doesn't exist
 if [ ! -f "main.swift" ]; then
@@ -45,16 +46,26 @@ for APP_NAME in "${BASE_APPS[@]}"; do
 
     # Compile Swift or use backup binary
     if [ -f "main.swift" ]; then
-        swiftc main.swift -o "${MACOS_DIR}/${APP_NAME}" -target arm64-apple-macosx11.0
+        if [ "$APP_NAME" == "NotifiCLI" ]; then
+            BINARY_NAME="NotifiCLI-Binary"
+        else
+            BINARY_NAME="$APP_NAME"
+        fi
+        swiftc main.swift -o "${MACOS_DIR}/${BINARY_NAME}" -target arm64-apple-macosx11.0
     elif [ -f "$BACKUP_DIR/NotifiCLI" ]; then
         echo "   Using preserved binary..."
-        cp "$BACKUP_DIR/NotifiCLI" "${MACOS_DIR}/${APP_NAME}"
+        if [ "$APP_NAME" == "NotifiCLI" ]; then
+            cp "$BACKUP_DIR/NotifiCLI" "${MACOS_DIR}/NotifiCLI-Binary"
+        else
+            cp "$BACKUP_DIR/NotifiCLI" "${MACOS_DIR}/${APP_NAME}"
+        fi
     else
         echo "❌ Error: No main.swift and no existing binary to copy!"
         exit 1
     fi
 
     # Ad-hoc sign
+    xattr -cr "$APP_BUNDLE"
     codesign --force --deep -s - "$APP_BUNDLE"
     echo "✅ Built ${APP_BUNDLE}"
 done
@@ -64,6 +75,7 @@ echo "📦 Embedding NotifiPersistent inside NotifiCLI..."
 APPS_DIR="${BUILD_DIR}/NotifiCLI.app/Contents/Apps"
 mkdir -p "$APPS_DIR"
 mv "${BUILD_DIR}/NotifiPersistent.app" "$APPS_DIR/"
+xattr -cr "${BUILD_DIR}/NotifiCLI.app"
 codesign --force --deep -s - "${BUILD_DIR}/NotifiCLI.app"
 
 echo "✅ NotifiPersistent embedded in NotifiCLI.app/Contents/Apps/"
@@ -135,10 +147,12 @@ if [ -d "$ICONS_DIR" ]; then
             if [ "$BASE_TYPE" == "NotifiPersistent" ]; then
                 cp "${APPS_DIR}/NotifiPersistent.app/Contents/MacOS/NotifiPersistent" "${MACOS_DIR}/${APP_NAME}"
             else
-                cp "${BUILD_DIR}/NotifiCLI.app/Contents/MacOS/NotifiCLI" "${MACOS_DIR}/${APP_NAME}"
+                # Copy the binary with -Binary suffix from base app to variant app
+                cp "${BUILD_DIR}/NotifiCLI.app/Contents/MacOS/NotifiCLI-Binary" "${MACOS_DIR}/${APP_NAME}"
             fi
 
             # 4. Ad-hoc sign (Removed entitlements for Tahoe compatibility)
+            xattr -cr "$APP_BUNDLE"
             codesign --force --deep -s - "$APP_BUNDLE"
             
             # Move into NotifiCLI.app/Contents/Apps/

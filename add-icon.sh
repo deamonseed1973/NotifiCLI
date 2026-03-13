@@ -37,7 +37,7 @@ else
     exit 1
 fi
 
-NOTIFICLI_BIN="$BASE_SRC/Contents/MacOS/NotifiCLI"
+NOTIFICLI_BIN="$BASE_SRC/Contents/MacOS/NotifiCLI-Binary"
 PERSISTENT_BIN="$BASE_SRC/Contents/Apps/NotifiPersistent.app/Contents/MacOS/NotifiPersistent"
 
 # Fallback for persistent if not embedded yet (local dev case)
@@ -201,6 +201,7 @@ for BASE_TYPE in "${VARIANTS[@]}"; do
     fi
 
     # 4. Sign (Removed entitlements for Tahoe compatibility)
+    xattr -cr "$TARGET_APP" 2>/dev/null
     codesign --force --deep -s - "$TARGET_APP" 2>/dev/null
     
     # 5. Remove quarantine (helps with Sequoia/Tahoe notification permissions)

@@ -39,6 +39,15 @@
 			xqgLwHIAKU3mnuwmPqm6nBtvbNGCY43Qaaq9M7LXnVk=
 			</data>
 		</dict>
+		<key>MacOS/NotifiCLI-Binary</key>
+		<dict>
+			<key>cdhash</key>
+			<data>
+			zJxVV7Xp9nXMCU/5YZXxZQKf6ZI=
+			</data>
+			<key>requirement</key>
+			<string>cdhash H"cc9c5557b5e9f675cc094ff96195f165029fe992"</string>
+		</dict>
 		<key>Resources/AppIcon.icns</key>
 		<dict>
 			<key>hash2</key>
