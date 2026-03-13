@@ -10,6 +10,7 @@ cd "$DIR"
 
 APP_PATH="$1"
 VARIANT_NAME="$2"
+DISPLAY_NAME="${3:-$VARIANT_NAME}"
 ICONS_DIR="icons"
 BUILD_DIR="build"
 
@@ -177,14 +178,15 @@ for BASE_TYPE in "${VARIANTS[@]}"; do
     mkdir -p "$MACOS_DIR" "$RESOURCES_DIR"
 
     # 1. Info.plist
+    cp "$INFO_PLIST_SRC" "${CONTENTS_DIR}/Info.plist"
     if [ "$BASE_TYPE" == "NotifiPersistent" ]; then
-        sed "s/com.saihgupr.NotifiPersistent.v2/com.saihgupr.NotifiPersistent.${VARIANT_NAME}/" "$INFO_PERSISTENT_PLIST_SRC" > "${CONTENTS_DIR}/Info.plist.tmp"
-        sed -i '' "s/<string>NotifiPersistent<\/string>/<string>${VARIANT_NAME}<\/string>/" "${CONTENTS_DIR}/Info.plist.tmp"
+        cp "$INFO_PERSISTENT_PLIST_SRC" "${CONTENTS_DIR}/Info.plist"
+        /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier com.saihgupr.NotifiPersistent.${VARIANT_NAME}" "${CONTENTS_DIR}/Info.plist"
+        /usr/libexec/PlistBuddy -c "Set :CFBundleName '${DISPLAY_NAME} (Persistent)'" "${CONTENTS_DIR}/Info.plist"
     else
-        sed "s/com.saihgupr.NotifiCLI.v2/com.saihgupr.NotifiCLI.${VARIANT_NAME}/" "$INFO_PLIST_SRC" > "${CONTENTS_DIR}/Info.plist.tmp"
-        sed -i '' "s/<string>NotifiCLI<\/string>/<string>${VARIANT_NAME}<\/string>/" "${CONTENTS_DIR}/Info.plist.tmp"
+        /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier com.saihgupr.NotifiCLI.${VARIANT_NAME}" "${CONTENTS_DIR}/Info.plist"
+        /usr/libexec/PlistBuddy -c "Set :CFBundleName '${DISPLAY_NAME}'" "${CONTENTS_DIR}/Info.plist"
     fi
-    mv "${CONTENTS_DIR}/Info.plist.tmp" "${CONTENTS_DIR}/Info.plist"
 
     # 2. Icon
     cp "$ICON_PATH" "${RESOURCES_DIR}/AppIcon.icns"

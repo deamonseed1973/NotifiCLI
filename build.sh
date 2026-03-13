@@ -93,7 +93,8 @@ if [ -d "$ICONS_DIR" ]; then
         # Get variant name and extension
         FILENAME=$(basename "$ICON_FILE")
         EXTENSION="${FILENAME##*.}"
-        VARIANT_NAME="${FILENAME%.*}"
+        VARIANT_DISPLAY_NAME="${FILENAME%.*}"
+        VARIANT_NAME="${VARIANT_DISPLAY_NAME// /}"
         # Process both variants: Standard and Persistent
         VARIANTS=("NotifiCLI" "NotifiPersistent")
         
@@ -110,17 +111,14 @@ if [ -d "$ICONS_DIR" ]; then
 
             # Use appropriate Info.plist as base and modify bundle ID
             if [ "$BASE_TYPE" == "NotifiPersistent" ]; then
-                BASE_PLIST="Info_Persistent.plist"
-                # Simplified flat bundle ID: com.saihgupr.NotifiPersistent.${VARIANT_NAME}
-                sed "s/com.saihgupr.NotifiPersistent.v2/com.saihgupr.NotifiPersistent.${VARIANT_NAME}/" "$BASE_PLIST" > "${CONTENTS_DIR}/Info.plist.tmp"
-                sed -i '' "s/<string>NotifiPersistent<\/string>/<string>${VARIANT_NAME}<\/string>/" "${CONTENTS_DIR}/Info.plist.tmp"
+                cp Info_Persistent.plist "${CONTENTS_DIR}/Info.plist"
+                /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier com.saihgupr.NotifiPersistent.${VARIANT_NAME}" "${CONTENTS_DIR}/Info.plist"
+                /usr/libexec/PlistBuddy -c "Set :CFBundleName '${VARIANT_DISPLAY_NAME} (Persistent)'" "${CONTENTS_DIR}/Info.plist"
             else
-                BASE_PLIST="Info.plist"
-                # Simplified flat bundle ID: com.saihgupr.NotifiCLI.${VARIANT_NAME}
-                sed "s/com.saihgupr.NotifiCLI.v2/com.saihgupr.NotifiCLI.${VARIANT_NAME}/" "$BASE_PLIST" > "${CONTENTS_DIR}/Info.plist.tmp"
-                sed -i '' "s/<string>NotifiCLI<\/string>/<string>${VARIANT_NAME}<\/string>/" "${CONTENTS_DIR}/Info.plist.tmp"
+                cp Info.plist "${CONTENTS_DIR}/Info.plist"
+                /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier com.saihgupr.NotifiCLI.${VARIANT_NAME}" "${CONTENTS_DIR}/Info.plist"
+                /usr/libexec/PlistBuddy -c "Set :CFBundleName '${VARIANT_DISPLAY_NAME}'" "${CONTENTS_DIR}/Info.plist"
             fi
-            mv "${CONTENTS_DIR}/Info.plist.tmp" "${CONTENTS_DIR}/Info.plist"
 
             # 2. Icon conversion or copy
             if [ "$EXTENSION" == "png" ]; then
