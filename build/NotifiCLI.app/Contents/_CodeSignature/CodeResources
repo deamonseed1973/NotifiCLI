@@ -15,14 +15,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			UNNdMcNTFbJfpK4gJC91EmQaGG5ymghouw7nOp2XTR0=
+			PKL7cDEJyOr5X1VJYNbKxOzVBMJotNc7Pk5fk7Toyqg=
 			</data>
 		</dict>
 		<key>Apps/NotifiPersistent.app/Contents/MacOS/NotifiPersistent</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			EHa96LAoudc8sVyXnEEaLWW9kWNIHh6hFmmUe3PkHA4=
+			B4y4XZT8SkRJwd08SE4UybhHy3vdAE/ujGvN0m8/Wws=
 			</data>
 		</dict>
 		<key>Apps/NotifiPersistent.app/Contents/Resources/AppIcon.icns</key>
@@ -38,15 +38,6 @@
 			<data>
 			xqgLwHIAKU3mnuwmPqm6nBtvbNGCY43Qaaq9M7LXnVk=
 			</data>
-		</dict>
-		<key>MacOS/NotifiCLI-Binary</key>
-		<dict>
-			<key>cdhash</key>
-			<data>
-			zJxVV7Xp9nXMCU/5YZXxZQKf6ZI=
-			</data>
-			<key>requirement</key>
-			<string>cdhash H"cc9c5557b5e9f675cc094ff96195f165029fe992"</string>
 		</dict>
 		<key>Resources/AppIcon.icns</key>
 		<dict>

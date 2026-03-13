@@ -159,19 +159,38 @@ fi
 OUTPUT=$("$COMMAND" "${PASSTHROUGH_ARGS[@]}" 2>&1)
 EXIT_CODE=$?
 
-if [ $EXIT_CODE -ne 0 ] && [[ "$OUTPUT" == *"Notifications are not allowed"* ]] && [ -n "$VARIANT_APP" ]; then
-    # Re-trigger blessing: register with LaunchServices and open to prompt authorization
-    if [ "$IS_PERSISTENT" -eq 1 ]; then
-        FRIENDLY_NAME="${BASE_NAME} (Persistent)"
+if [ $EXIT_CODE -ne 0 ] && [[ "$OUTPUT" == *"Notifications are not allowed"* ]]; then
+    # Determine the bundle and name for permission request
+    if [ -n "$VARIANT_APP" ]; then
+        TARGET_BUNDLE="$VARIANT_APP"
+        if [ "$IS_PERSISTENT" -eq 1 ]; then
+            FRIENDLY_NAME="${BASE_NAME} (Persistent)"
+        else
+            FRIENDLY_NAME="${BASE_NAME}"
+        fi
     else
-        FRIENDLY_NAME="${BASE_NAME}"
+        # For base app, we need to target the bundle that owns the notifications
+        if [ "$IS_PERSISTENT" -eq 1 ]; then
+            FRIENDLY_NAME="NotifiCLI (Persistent)"
+            # Persistent base app is in Contents/Apps/
+            if [ -d "${APP_DIR}/Contents/Apps/NotifiPersistent.app" ]; then
+                TARGET_BUNDLE="${APP_DIR}/Contents/Apps/NotifiPersistent.app"
+            else
+                TARGET_BUNDLE="$APP_DIR"
+            fi
+        else
+            FRIENDLY_NAME="NotifiCLI"
+            TARGET_BUNDLE="$APP_DIR"
+        fi
     fi
 
     echo "⚙️  Notification permission missing for '${FRIENDLY_NAME}'. Requesting authorization..."
     
+    # Re-trigger blessing: register with LaunchServices and open to prompt authorization
     # Use absolute path for lsregister
-    /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$VARIANT_APP"
-    open "$VARIANT_APP" 2>/dev/null || true
+    /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$TARGET_BUNDLE"
+    # For newer macOS, opening the bundle usually triggers the prompt
+    open "$TARGET_BUNDLE" 2>/dev/null || true
     
     echo ""
     echo "💡 A permission prompt should appear. If not, enable notifications manually:"
